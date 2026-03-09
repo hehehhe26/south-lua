@@ -12,10 +12,10 @@ local tweenService = game:GetService("TweenService")
 local players = game:GetService("Players")
 local userInputService = game:GetService("UserInputService")
 
--- ERROR CATCHING - This will show us what's wrong
+-- ERROR CATCHING
 print("🔍 Script started - checking for errors...")
 
-local success, error = pcall(function()
+local success, err = pcall(function()
     -- E Key Fix
     local guiService = game:GetService("GuiService")
     local contextActionService = game:GetService("ContextActionService")
@@ -45,7 +45,7 @@ local success, error = pcall(function()
     -- Character references
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
-    print("✅ Character found:", character.Name)
+    print("✅ Character found: " .. character.Name)
     
     -- Main GUI
     local mainGui = Instance.new("ScreenGui")
@@ -55,15 +55,15 @@ local success, error = pcall(function()
     mainGui.Parent = player:WaitForChild("PlayerGui")
     print("✅ GUI created")
     
-    -- SIMPLE TEST FRAME - This will confirm it's working
+    -- Test frame
     local testFrame = Instance.new("Frame")
     testFrame.Size = UDim2.new(0, 100, 0, 100)
     testFrame.Position = UDim2.new(0, 0, 0, 0)
     testFrame.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
     testFrame.Parent = mainGui
-    print("✅ Test frame added - you should see a green square")
+    print("✅ Test frame added")
     
-    -- Billboard Holder for ESP
+    -- Billboard Holder
     local billboardHolder = Instance.new("Folder")
     billboardHolder.Name = "BillboardHolder"
     billboardHolder.Parent = mainGui
@@ -71,7 +71,7 @@ local success, error = pcall(function()
     local gothamFont = Enum.Font.Gotham
     local gothamBoldFont = Enum.Font.GothamBold
     
-    -- Draggable window function
+    -- Draggable function
     local function makeDraggable(frame)
         local dragging = false
         local dragInput, dragStart, startPos
@@ -125,7 +125,6 @@ local success, error = pcall(function()
     mainStroke.Transparency = 0.5
     mainStroke.Parent = mainWindow
     
-    -- Header
     local header = Instance.new("ImageLabel")
     header.Name = "Header"
     header.Size = UDim2.new(1, 30, 0, 30)
@@ -138,7 +137,6 @@ local success, error = pcall(function()
     header.SliceCenter = Rect.new(10, 10, 28, 28)
     header.Parent = mainWindow
     
-    -- Gradient
     local gradient = Instance.new("UIGradient")
     gradient.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 25, 32)),
@@ -147,7 +145,6 @@ local success, error = pcall(function()
     gradient.Rotation = 90
     gradient.Parent = mainWindow
     
-    -- Status Bar
     local statusBar = Instance.new("Frame")
     statusBar.Size = UDim2.new(1, -20, 0, 3)
     statusBar.Position = UDim2.new(0, 10, 0, 30)
@@ -159,14 +156,12 @@ local success, error = pcall(function()
     statusCorner.CornerRadius = UDim.new(0, 3)
     statusCorner.Parent = statusBar
     
-    -- Content
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -30, 0, 60)
     content.Position = UDim2.new(0, 15, 0, 0)
     content.BackgroundTransparency = 1
     content.Parent = mainWindow
     
-    -- Title Section
     local titleSection = Instance.new("ImageLabel")
     titleSection.Size = UDim2.new(0, 32, 0, 32)
     titleSection.Position = UDim2.new(0, 0, 0, -16)
@@ -300,7 +295,7 @@ local success, error = pcall(function()
     local playersOnlineText = Instance.new("TextLabel")
     playersOnlineText.Size = UDim2.new(1, 0, 1, 0)
     playersOnlineText.BackgroundTransparency = 1
-    playersOnlineText.Text = "0"
+    playersOnlineText.Text = tostring(#players:GetPlayers())
     playersOnlineText.TextColor3 = Color3.fromRGB(180, 180, 195)
     playersOnlineText.Font = gothamBoldFont
     playersOnlineText.TextSize = 11
@@ -535,6 +530,7 @@ local success, error = pcall(function()
     panel3.BorderSizePixel = 0
     panel3.Parent = mainGui
     makeDraggable(panel3)
+    print("✅ Panel 3 created")
     
     local panel3Corner = Instance.new("UICorner")
     panel3Corner.CornerRadius = UDim.new(0, 18)
@@ -580,7 +576,6 @@ local success, error = pcall(function()
     panel3Title.TextXAlignment = Enum.TextXAlignment.Left
     panel3Title.Parent = panel3Header
     
-    -- Content Area
     local contentArea = Instance.new("Frame")
     contentArea.Size = UDim2.new(1, -30, 0, 35)
     contentArea.Position = UDim2.new(0, 15, 0, 70)
@@ -603,7 +598,6 @@ local success, error = pcall(function()
     contentText.TextXAlignment = Enum.TextXAlignment.Left
     contentText.Parent = contentArea
     
-    -- Scrolling Frame
     local scrollingFrame = Instance.new("ScrollingFrame")
     scrollingFrame.Size = UDim2.new(1, -30, 1, -145)
     scrollingFrame.Position = UDim2.new(0, 15, 0, 115)
@@ -619,7 +613,6 @@ local success, error = pcall(function()
     scrollingCorner.CornerRadius = UDim.new(0, 12)
     scrollingCorner.Parent = scrollingFrame
     
-    -- Close Button
     local closeButton = Instance.new("TextButton")
     closeButton.Size = UDim2.new(0, 100, 0, 35)
     closeButton.Position = UDim2.new(1, -120, 1, -45)
@@ -695,7 +688,6 @@ local success, error = pcall(function()
         if isFarming then
             farmText.Text = "STOP FARMING"
             statusText.Text = "STATUS: FARMING"
-            -- Start farming loop here (simplified)
             spawn(function()
                 local step = 1
                 while isFarming do
@@ -713,17 +705,37 @@ local success, error = pcall(function()
     end)
     
     print("✅ Farm toggle connected")
-    print("🎉 SCRIPT FULLY LOADED! You should see the GUI now.")
+    print("🎉 SCRIPT FULLY LOADED!")
+    
+    -- Update player count
+    spawn(function()
+        while true do
+            playersOnlineText.Text = tostring(#players:GetPlayers())
+            wait(1)
+        end
+    end)
     
 end)
 
 if not success then
-    warn("❌ SCRIPT ERROR:", error)
-    print("Error details:", error)
+    warn("❌ SCRIPT ERROR:", err)
+    print("Error details: " .. tostring(err))
     
-    -- Show error on screen
     local errorGui = Instance.new("ScreenGui")
     errorGui.Parent = player:WaitForChild("PlayerGui")
     
     local errorFrame = Instance.new("Frame")
-    errorFrame.Size = UDim2.new(0, 400, 0, 200
+    errorFrame.Size = UDim2.new(0, 400, 0, 200)
+    errorFrame.Position = UDim2.new(0.5, -200, 0.5, -100)
+    errorFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    errorFrame.Parent = errorGui
+    
+    local errorText = Instance.new("TextLabel")
+    errorText.Size = UDim2.new(1, -20, 1, -20)
+    errorText.Position = UDim2.new(0, 10, 0, 10)
+    errorText.Text = "ERROR:\n" .. tostring(err)
+    errorText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    errorText.TextWrapped = true
+    errorText.BackgroundTransparency = 1
+    errorText.Parent = errorFrame
+end
